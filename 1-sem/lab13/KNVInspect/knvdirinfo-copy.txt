@@ -1,0 +1,22 @@
+	Папки:
+$Recycle.Bin
+$WINDOWS.~BT
+$WinREAgent
+Documents and Settings
+Intel
+Microsoft
+MSOCache
+nodejs
+PerfLogs
+Program Files
+Program Files (x86)
+ProgramData
+Recovery
+System Volume Information
+Users
+Windows
+	Файлы:
+DumpStack.log.tmp
+hiberfil.sys
+pagefile.sys
+swapfile.sys
