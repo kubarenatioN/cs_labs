@@ -1,0 +1,65 @@
+﻿<Window x:Class="lab7.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:lab7"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="650" Width="1200">
+
+    <Window.Resources>
+        <local:WidthHeightConverter x:Key="widthHeightConverter"/>
+    </Window.Resources>
+    
+    <ScrollViewer>
+
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel>
+                <TextBlock 
+                Text="User Control 1"/>
+                <WrapPanel 
+                    Background="#303030">
+                    <local:ProductCardControl
+                        Title="Osaka Sushi"
+                        Composition="Креветка тигровая, творожный сыр, авокадо, огурец, лосось, васаби 0,5г"
+                        ImageSource="../Images/osaka.png"
+                        Price="120.4"
+                        MyClick="ProductCardControl_ButtonClick"
+                        MouseLostFocus=""
+                        />
+                    <local:ProductCardControl
+                        Title="Tekka Sushi"
+                        Composition="Тунец, васаби 0,5г"
+                        ImageSource="../Images/tekka.png"
+                        Price="110.4"
+                        MyClick="ProductCardControl_ButtonClick"
+                        />
+                    <local:ProductCardControl
+                        Title="Avocado Sushi"
+                        Composition="Авокадо, майонез, васаби 0,5г"
+                        ImageSource="../Images/avocado.png"
+                        Price="153.4"
+                        MyClick="ProductCardControl_ButtonClick"
+                        />
+                    <local:ProductCardControl
+                        Title="Kayso Sushi"
+                        Composition="Креветка тигровая, лосось, творожный сыр, водоросли хияши вакаме, васаби 0,5г"
+                        ImageSource="../Images/kayso.png"
+                        Price="113.7"
+                        MyClick="ProductCardControl_ButtonClick"
+                        />
+                    <local:ProductCardControl
+                        Price="39.5"/>
+                </WrapPanel>
+            </StackPanel>
+
+
+        </Grid>
+    </ScrollViewer>
+</Window>

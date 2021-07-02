@@ -1,0 +1,53 @@
+﻿<Window x:Class="lab10.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:lab10"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+
+    <Window.Resources>
+        <ResourceDictionary Source="../Styles/General.xaml"/>
+    </Window.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock 
+            Padding="5"
+            Text="Факультет ИТ" 
+            FontSize="20"
+            HorizontalAlignment="Center"/>
+
+        <Grid 
+            Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <RadioButton 
+                Style="{StaticResource TabButton}"
+                Command="{Binding OpenGroupsPageCommand}"
+                Content="Группы"/>
+
+            <RadioButton 
+                Style="{StaticResource TabButton}"
+                Command="{Binding OpenSpecsPageCommand}"
+                Grid.Column="1"
+                Content="Специальности"/>
+
+        </Grid>
+
+        <Frame
+            Grid.Row="2"
+            Content="{Binding CurrentPage}"
+            NavigationUIVisibility="Hidden"/>
+
+    </Grid>
+</Window>

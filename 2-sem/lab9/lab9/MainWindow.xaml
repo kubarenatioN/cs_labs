@@ -1,0 +1,72 @@
+﻿<Window x:Class="lab9.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:lab9"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="550" Width="800" WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/GeneralStyles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="5*"/>
+        </Grid.ColumnDefinitions>
+
+        <StackPanel Margin="0 0 20 0">
+            <Label Content="Choose team:"/>
+            <ComboBox 
+                
+                ItemsSource="{Binding TeamsCollection}" 
+                SelectedItem="{Binding SelectedTeam}" MaxDropDownHeight="240">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate DataType="{x:Type local:Team}">
+                        <StackPanel>
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+
+            <Label Content="Add team:"/>
+            <Button 
+                Command="{Binding AddTeamCommand}"
+                Content="Add"/>
+
+            <Label Content="Remove team:"/>
+            <Button 
+                Command="{Binding RemoveTeamCommand}"
+                Content="Remove"/>
+
+            <Label Content="Edit team:"/>
+            <Button 
+                Command="{Binding EditTeamCommand}"
+                Content="Edit"/>
+
+            <Label Content="Execute transaction:"/>
+            <Button 
+                Command="{Binding ExecuteTransactionCommand}"
+                Content="Transaction"/>
+
+            <Label Content="Async operations:"/>
+            <Button 
+                Command="{Binding AsyncWorkCommand}"
+                Content="Async"/>
+        </StackPanel>
+
+        <Frame 
+            NavigationUIVisibility="Hidden"
+            Grid.Column="1"
+            Content="{Binding CurrentPage}">
+
+        </Frame>
+
+    </Grid>
+    
+</Window>

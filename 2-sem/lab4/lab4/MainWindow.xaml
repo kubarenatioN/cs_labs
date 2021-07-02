@@ -1,0 +1,169 @@
+﻿<Window x:Class="lab4.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:lab4"
+        xmlns:vm="clr-namespace:lab4.ViewModels"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="{DynamicResource mainWindowTitle}" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="CommandBinding_CloseExecuted"/>
+    </Window.CommandBindings>
+    <Window.Resources>
+        <vm:FontSizeSlider x:Key="fontSizeSlider" Value="14"/>
+        <vm:FontFamilyViewModel x:Key="fontFamilyVM" />
+        <vm:ColorPickerViewModel x:Key="colorPicker" ColorCode="Black"/>
+        <vm:FileDialogViewModel x:Key="fileDialog"/>
+        <vm:TextEditorViewModel x:Key="textEditor"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu>
+            <Menu.InputBindings>
+                <KeyBinding 
+                    Command="{Binding NewFile}"
+                    Key="{Binding NewFile.GestureKey}"
+                    Modifiers="{Binding NewFile.GestureModifier}"/>
+            </Menu.InputBindings>
+            <MenuItem 
+                Name="fileDialogMenuItem"
+                Header="{DynamicResource menuItemFile}" 
+                DataContext="{Binding Source={StaticResource fileDialog}}">
+                <MenuItem Header="{DynamicResource newCommand}" Command="{Binding NewFile}"></MenuItem>
+                <MenuItem Header="{DynamicResource openCommand}" Command="{Binding OpenFile}"></MenuItem>
+                <MenuItem Header="{DynamicResource saveCommand}" Command="{Binding SaveFile}"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource menuItemEdit}">
+                <MenuItem Header="{DynamicResource copyCommand}" Command="Copy" CommandTarget="{Binding ElementName=richTextBox}"></MenuItem>
+                <MenuItem Header="{DynamicResource pasteCommand}" Command="Paste" CommandTarget="{Binding ElementName=richTextBox}"></MenuItem>
+                <MenuItem Header="{DynamicResource cutCommand}" Command="Cut" CommandTarget="{Binding ElementName=richTextBox}"></MenuItem>
+                <MenuItem Header="{DynamicResource undoCommand}" Command="Undo" CommandTarget="{Binding ElementName=richTextBox}"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="{DynamicResource langMenuItem}" Name="LangMenu">
+                
+            </MenuItem>
+        </Menu>
+        <ToolBar 
+            Grid.Row="1" 
+            VerticalContentAlignment="Center"
+            ToolBarTray.IsLocked="True" Grid.ColumnSpan="2">
+            <ComboBox 
+                DataContext="{Binding Source={StaticResource fontFamilyVM}}"
+                Width="120"
+                Height="24"
+                ItemsSource="{Binding Families.Values}"
+                SelectedIndex="{Binding SelectedItemId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                VerticalContentAlignment="Center"
+                Name="fontFamilyComboBox">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock FontFamily="{Binding}" Text="{Binding Mode=OneWay}"></TextBlock>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock 
+                    Margin="0,0,4,0"
+                    Text="{Binding ElementName=fontSizeSlider, Path=Value}"
+                    Width="16"
+                    TextAlignment="Right" VerticalAlignment="Center"
+                    />
+                <Slider 
+                    DataContext="{Binding Source={StaticResource fontSizeSlider}}"
+                    IsSnapToTickEnabled="True" 
+                    SmallChange="1" 
+                    Minimum="8"
+                    Maximum="72"
+                    Value="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Width="120" 
+                    x:Name="fontSizeSlider"
+                    ValueChanged="FontSizeSlider_ValueChanged" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="0,0,8,0">
+                </Slider>
+            </StackPanel>
+            <xctk:ColorPicker 
+                DataContext="{Binding Source={StaticResource colorPicker}}"
+                Name="colorPicker"
+                Width="40" 
+                ColorMode="ColorCanvas" 
+                SelectedColor="{Binding ColorCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                SelectedColorChanged="ColorPicker_SelectedColorChanged" Margin="0,0,8,0" 
+                 />
+            <Button 
+                Content="B" 
+                VerticalAlignment="Center" 
+                Width="24"
+                FontFamily="Times New Roman"
+                FontWeight="Bold" Padding="0" Height="24" FontSize="20"
+                BorderThickness="1"
+                BorderBrush="Black" Margin="0,0,5,0"
+                Command="ToggleBold" CommandTarget="{Binding ElementName=richTextBox}"
+                />
+            <Button 
+                Content="I" 
+                VerticalAlignment="Center" 
+                Width="24"
+                FontFamily="Times New Roman"
+                FontStyle="Italic" Padding="0" Height="24" FontSize="20"
+                BorderThickness="1"
+                BorderBrush="Black" Margin="0,0,5,0"
+                Command="ToggleItalic" CommandTarget="{Binding ElementName=richTextBox}"
+                />
+            <Button 
+                VerticalAlignment="Center" 
+                Width="24"
+                FontFamily="Times New Roman"
+                Padding="0" Height="24" FontSize="20"
+                BorderThickness="1"
+                BorderBrush="Black" Margin="0,0,5,0"
+                Command="ToggleUnderline" CommandTarget="{Binding ElementName=richTextBox}"
+                >
+                <Button.Content>
+                    <Underline>U</Underline>
+                </Button.Content>
+            </Button>
+        </ToolBar>
+        <RichTextBox
+            DataContext="{Binding Source={StaticResource textEditor}}"
+            Grid.Row="2" 
+            SpellCheck.IsEnabled="True" 
+            VerticalScrollBarVisibility="Auto" 
+            ScrollViewer.CanContentScroll="True" 
+            FontSize="14"
+            SelectionChanged="RichTextBox_SelectionChanged"
+            x:Name="richTextBox" 
+            DragEnter="RichTextBox_DragEnter"
+            Drop="RichTextBox_Drop" 
+            TextChanged="RichTextBox_TextChanged">
+
+            <RichTextBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="{DynamicResource copyCommand}"
+                              Command="Copy" 
+                              CommandTarget="{Binding ElementName=richTextBox}"/>
+                    <MenuItem Header="{DynamicResource pasteCommand}"
+                              Command="Paste" 
+                              CommandTarget="{Binding ElementName=richTextBox}"/>
+                    <MenuItem Header="{DynamicResource cutCommand}"
+                              Command="Cut" 
+                              CommandTarget="{Binding ElementName=richTextBox}"/>
+                    <Separator/>
+                    <MenuItem Header="{DynamicResource closeCommand}" Command="Close"/>
+                </ContextMenu>
+            </RichTextBox.ContextMenu>
+        </RichTextBox>
+        <StatusBar Grid.Row="3" DataContext="{Binding Source={StaticResource textEditor}}">
+            <TextBlock Text="{DynamicResource charNumber}"/>
+            <TextBlock Text="{Binding SymbolsNumber}"/>
+            <TextBlock Text="{DynamicResource wordNumber}"/>
+            <TextBlock Text="{Binding WordsNumber}"/>
+        </StatusBar>
+    </Grid>
+</Window>

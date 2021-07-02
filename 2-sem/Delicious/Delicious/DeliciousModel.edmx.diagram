@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="35698ea170c24dd5aa5f1ea1dfb4056c" Name="Diagram1">
+        <EntityTypeShape EntityType="DeliciousModel.Dishes" Width="1.5" PointX="13" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliciousModel.Menus" Width="1.5" PointX="13" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliciousModel.Orders" Width="1.5" PointX="5" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliciousModel.Restaurants" Width="1.5" PointX="10" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="DeliciousModel.Users" Width="1.5" PointX="2.125" PointY="2.25" IsExpanded="true" />
+        <AssociationConnector Association="DeliciousModel.FK_Menus_Dishes" ManuallyRouted="false" />
+        <AssociationConnector Association="DeliciousModel.FK_Menus_Restaurants" ManuallyRouted="false" />
+        <AssociationConnector Association="DeliciousModel.FK_Orders_Users" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="DeliciousModel.Places" Width="1.5" PointX="7.375" PointY="5.25" />
+        <EntityTypeShape EntityType="DeliciousModel.RestaurantsPlaces" Width="1.5" PointX="7.375" PointY="2" />
+        <AssociationConnector Association="DeliciousModel.FK_Orders_RestaurantsPlaces" />
+        <AssociationConnector Association="DeliciousModel.FK_RestaurantsPlaces_Places" />
+        <AssociationConnector Association="DeliciousModel.FK_RestaurantsPlaces_Restaurants" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

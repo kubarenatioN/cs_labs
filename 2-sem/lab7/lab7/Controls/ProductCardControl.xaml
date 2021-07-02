@@ -1,0 +1,192 @@
+﻿<UserControl x:Class="lab7.ProductCardControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:lab7"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800"
+             Loaded="UserControl_Loaded">
+    
+    <UserControl.Resources>
+        <local:WidthHeightConverter x:Key="converter"/>
+    </UserControl.Resources>
+
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static local:ProductCardControl.IconAddCommand}"
+                    Executed="IconAddCommandExecuted" />
+        <CommandBinding Command="{x:Static local:ProductCardControl.IconRemoveCommand}"
+                    Executed="IconRemoveCommandExecuted" />
+    </UserControl.CommandBindings>
+
+    <UserControl.Style>
+        <Style TargetType="{x:Type UserControl}">
+            <Setter Property="Width" Value="{Binding 
+                        RelativeSource={RelativeSource 
+                            Mode=FindAncestor, 
+                            AncestorType={x:Type WrapPanel}},
+                        Path=ActualWidth,
+                        Converter={StaticResource converter},
+                        ConverterParameter='4'}"/>
+            <Setter Property="Height" 
+                    Value="{Binding Path=ActualWidth, 
+                                    RelativeSource={RelativeSource Mode=Self},
+                                    Converter={StaticResource converter},
+                                    ConverterParameter='0,8'}"/>
+            <!--<Setter Property="Margin" Value="10 6"/>-->
+            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+        </Style>
+    </UserControl.Style>
+
+    <Border
+        Margin="10 6">
+        <Border 
+            CornerRadius="20"
+            BorderBrush="Violet"
+            BorderThickness="0">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Style.Triggers>
+                        <EventTrigger RoutedEvent="MouseEnter">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ThicknessAnimation
+                                        Storyboard.TargetProperty="BorderThickness"
+                                        To="3"
+                                        Duration="0:0:0.3"
+                                        />
+                                        <ThicknessAnimation
+                                        Storyboard.TargetProperty="Margin"
+                                        To="-3"
+                                        Duration="0:0:0.3"
+                                        />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                        <EventTrigger RoutedEvent="MouseLeave">
+                            <EventTrigger.Actions>
+                                <BeginStoryboard>
+                                    <Storyboard>
+                                        <ThicknessAnimation
+                                        Storyboard.TargetProperty="BorderThickness"
+                                        To="0"
+                                        Duration="0:0:0.2"
+                                        />
+                                        <ThicknessAnimation
+                                        Storyboard.TargetProperty="Margin"
+                                        To="0"
+                                        Duration="0:0:0.2"
+                                        />
+                                    </Storyboard>
+                                </BeginStoryboard>
+                            </EventTrigger.Actions>
+                        </EventTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+
+            <Grid>
+                <Grid.OpacityMask>
+                    <VisualBrush Visual="{Binding ElementName=clip}"/>
+                </Grid.OpacityMask>
+                
+                <Border 
+                    Background="Violet"
+                    Name="clip"
+                    CornerRadius="20"/>
+                
+                <Border 
+                    Padding="10"
+                    Background="Black">
+
+                    <Grid HorizontalAlignment="Stretch">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+
+                        <Image 
+                        Stretch="Uniform"
+                        Source="{Binding ImageSource}"/>
+
+                        <Grid 
+                        Grid.Row="1">
+
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <StackPanel>
+                                <TextBlock 
+                            HorizontalAlignment="Center"
+                            Foreground="White"
+                            FontSize="24"
+                            Margin="0 4"
+                            Text="{Binding Title}"/>
+                                <TextBlock
+                            Foreground="White"
+                            Text="{Binding Composition}"
+                            TextWrapping="WrapWithOverflow"/>
+                                <!--<TextBlock 
+                            Foreground="AntiqueWhite"
+                            Text="{Binding RelativeSource={RelativeSource Mode=Self},
+                            Path=ActualWidth}"/>-->
+                            </StackPanel>
+
+                            <StackPanel 
+                            Margin="0 4 0 0"
+                            HorizontalAlignment="Center"
+                            Grid.Row="2"
+                            Orientation="Horizontal">
+
+                                <local:IconButtonControl 
+                                    Command="{x:Static local:ProductCardControl.IconRemoveCommand}"
+                            MouseHover="IconButtonControl_MouseHover"
+                            MouseLostFocus="IconButtonControl_MouseLeave"
+                            IconPath="M256,0C114.833,0,0,114.833,0,256s114.833,256,256,256s256-114.853,256-256S397.167,0,256,0z M256,472.341    c-119.275,0-216.341-97.046-216.341-216.341S136.725,39.659,256,39.659S472.341,136.705,472.341,256S375.295,472.341,256,472.341z
+                            M355.148,234.386H156.852c-10.946,0-19.83,8.884-19.83,19.83s8.884,19.83,19.83,19.83h198.296    c10.946,0,19.83-8.884,19.83-19.83S366.094,234.386,355.148,234.386z"/>
+
+                                <StackPanel>
+                                    <TextBlock
+                                FontSize="18"
+                                HorizontalAlignment="Center"
+                                Foreground="White"
+                                Text="{Binding Amount}"/>
+                                    <TextBlock
+                                HorizontalAlignment="Center"
+                                Foreground="White"
+                                Text="{Binding Sum}"/>
+                                </StackPanel>
+
+                                <local:IconButtonControl 
+                                    Command="{x:Static local:ProductCardControl.IconAddCommand}"
+                            MouseHover="IconButtonControl_MouseHover"
+                            MouseLostFocus="IconButtonControl_MouseLeave"
+                            IconPath="M256,0C114.833,0,0,114.833,0,256s114.833,256,256,256s256-114.853,256-256S397.167,0,256,0z M256,472.341    c-119.275,0-216.341-97.046-216.341-216.341S136.725,39.659,256,39.659S472.341,136.705,472.341,256S375.295,472.341,256,472.341z
+                            M355.148,234.386H275.83v-79.318c0-10.946-8.864-19.83-19.83-19.83s-19.83,8.884-19.83,19.83v79.318h-79.318    c-10.966,0-19.83,8.884-19.83,19.83s8.864,19.83,19.83,19.83h79.318v79.318c0,10.946,8.864,19.83,19.83,19.83    s19.83-8.884,19.83-19.83v-79.318h79.318c10.966,0,19.83-8.884,19.83-19.83S366.114,234.386,355.148,234.386z"/>
+
+                            </StackPanel>
+                        </Grid>
+                    </Grid>
+                </Border>
+                
+                <Border 
+                    Padding="10"
+                    Background="White"
+                    Visibility="{Binding CompositionOpacity}"
+                    Grid.RowSpan="2">
+                    <TextBlock
+                        FontSize="18"
+                        Foreground="Black"
+                        Text="{Binding Composition}"
+                        TextWrapping="WrapWithOverflow"/>
+                </Border>
+            </Grid>
+        </Border>
+    </Border>
+
+</UserControl>

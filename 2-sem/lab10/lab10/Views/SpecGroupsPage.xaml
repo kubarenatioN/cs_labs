@@ -1,0 +1,74 @@
+﻿<Page x:Class="lab10.Views.SpecGroupsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:lab10"
+      mc:Ignorable="d" 
+      d:DesignHeight="450" d:DesignWidth="800"
+      Title="SpecGroupsPage">
+
+    <Page.Resources>
+        
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Styles/General.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+            <local:WidthHeightConverter x:Key="widthHeightConverter"/>
+        </ResourceDictionary>
+        
+    </Page.Resources>
+
+    
+    <ScrollViewer
+        VerticalScrollBarVisibility="Auto">
+
+        <Grid Background="LightGreen">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <StackPanel>
+                <Button 
+                    Content="Назад"
+                    HorizontalAlignment="Left"
+                    Command="{Binding GoBackCommand}"
+                    Style="{StaticResource GeneralButton}"/>
+
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock 
+                        Padding="20 10 0 10"
+                        Style="{StaticResource GeneralTextBlock}"
+                        Text="Список групп специальности "/>
+                    <TextBlock 
+                        Style="{StaticResource GeneralTextBlock}"
+                        Padding="0 10 20 10"
+                        Text="{Binding SpecName}"/>
+                </StackPanel>
+
+            </StackPanel>
+
+            <ItemsControl 
+                Grid.Row="1"
+                ItemsSource="{Binding GroupItemsCollection}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel 
+                        ItemWidth="{Binding 
+                        Path=ActualWidth,
+                        RelativeSource={RelativeSource 
+                        Mode=FindAncestor,
+                        AncestorType={x:Type ItemsControl}},
+                        Converter={StaticResource widthHeightConverter},
+                        ConverterParameter=4}"
+                        ItemHeight="{Binding 
+                        RelativeSource={RelativeSource Mode=Self},
+                        Path=ItemWidth}"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+            </ItemsControl>
+        </Grid>
+
+    </ScrollViewer>
+</Page>

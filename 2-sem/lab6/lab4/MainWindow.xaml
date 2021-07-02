@@ -1,0 +1,252 @@
+﻿<Window x:Class="lab4.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:lab4"
+        xmlns:localization="clr-namespace:lab4.Resources"
+        xmlns:vm="clr-namespace:lab4.ViewModels"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        mc:Ignorable="d"
+        Title="{DynamicResource mainWindowTitle}" 
+        Height="450" Width="800" WindowStartupLocation="CenterScreen">
+
+    <Window.CommandBindings>
+        <CommandBinding Command="Close" Executed="CommandBinding_CloseExecuted"/>
+    </Window.CommandBindings>
+    <Window.Resources>
+        <vm:FontSizeSlider x:Key="fontSizeSlider" Value="14"/>
+        <vm:FontFamilyViewModel x:Key="fontFamilyVM" />
+        <vm:ColorPickerViewModel x:Key="colorPicker" ColorCode="Black"/>
+        <vm:FileDialogViewModel x:Key="fileDialog"/>
+        <vm:TextEditorViewModel x:Key="textEditor"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu>
+            <Menu.InputBindings>
+                <KeyBinding 
+                    Command="{Binding NewFile}"
+                    Key="{Binding NewFile.GestureKey}"
+                    Modifiers="{Binding NewFile.GestureModifier}"/>
+            </Menu.InputBindings>
+            <MenuItem 
+                Name="fileDialogMenuItem"
+                Header="{x:Static localization:Localization.FileMenuItem}" 
+                DataContext="{Binding Source={StaticResource fileDialog}}">
+                <MenuItem Header="{x:Static localization:Localization.NewFileMenuItem}" Command="{Binding NewFile}"></MenuItem>
+                <MenuItem Header="{x:Static localization:Localization.OpenFileMenuItem}" Command="{Binding OpenFile}"></MenuItem>
+                <MenuItem Header="{x:Static localization:Localization.SaveFileMenuItem}" Command="{Binding SaveFile}"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="{x:Static localization:Localization.EditMenuItem}">
+                <MenuItem Header="{x:Static localization:Localization.CopyEditMenuItem}" Command="Copy" CommandTarget="{Binding ElementName=richTextBox}"></MenuItem>
+                <MenuItem Header="{x:Static localization:Localization.PasteEditMenuItem}" Command="Paste" CommandTarget="{Binding ElementName=richTextBox}"></MenuItem>
+                <MenuItem Header="{x:Static localization:Localization.CutEditMenuItem}" Command="Cut" CommandTarget="{Binding ElementName=richTextBox}"></MenuItem>
+                <MenuItem Header="{x:Static localization:Localization.UndoEditMenuItem}" Command="Undo" CommandTarget="{Binding ElementName=richTextBox}"></MenuItem>
+                <MenuItem Header="{x:Static localization:Localization.RedoEditMenuItem}" Command="Redo" CommandTarget="{Binding ElementName=richTextBox}"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="{x:Static localization:Localization.LangMenuItem}" 
+                      Name="LangMenu"
+                      ItemsSource="{Binding Cultures}">
+                
+            </MenuItem>
+            <MenuItem Header="{x:Static localization:Localization.EditorMenuItem}" Name="EditorMenu">
+                <MenuItem Header="{x:Static localization:Localization.DisableEditorMenuItem}" IsCheckable="True" Name="DisableEditor">
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="{x:Static localization:Localization.ThemeMenuItem}" ItemsSource="{Binding ThemeMenuItems}">
+                
+            </MenuItem>
+        </Menu>
+        <ToolBar 
+            Background="{DynamicResource MainBackgroundBrush}"
+            Grid.Row="1" 
+            VerticalContentAlignment="Center"
+            ToolBarTray.IsLocked="True" Grid.ColumnSpan="2">
+            <ComboBox 
+                Background="{DynamicResource MainBackgroundBrush}"
+                Foreground="{DynamicResource MainForegroundBrush}"
+                DataContext="{Binding Source={StaticResource fontFamilyVM}}"
+                Width="120"
+                Height="24"
+                ItemsSource="{Binding Families.Values}"
+                SelectedIndex="{Binding SelectedItemId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                VerticalContentAlignment="Center"
+                Name="fontFamilyComboBox">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock 
+                            FontFamily="{Binding}" 
+                            Text="{Binding Mode=OneWay}"/>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock 
+                    Foreground="{DynamicResource MainForegroundBrush}"
+                    Margin="0,0,4,0"
+                    Text="{Binding ElementName=fontSizeSlider, Path=Value}"
+                    Width="16"
+                    TextAlignment="Right" VerticalAlignment="Center"
+                    />
+                <Slider 
+                    DataContext="{Binding Source={StaticResource fontSizeSlider}}"
+                    IsSnapToTickEnabled="True" 
+                    SmallChange="1" 
+                    Minimum="8"
+                    Maximum="72"
+                    Value="{Binding Path=Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                    Width="120" 
+                    x:Name="fontSizeSlider"
+                    ValueChanged="FontSizeSlider_ValueChanged" VerticalContentAlignment="Center" VerticalAlignment="Center" Margin="0,0,8,0">
+                </Slider>
+            </StackPanel>
+            <xctk:ColorPicker 
+                DataContext="{Binding Source={StaticResource colorPicker}}"
+                Name="colorPicker"
+                Width="40" 
+                ColorMode="ColorCanvas" 
+                SelectedColor="{Binding ColorCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                SelectedColorChanged="ColorPicker_SelectedColorChanged" Margin="0,0,8,0" 
+                 />
+            <Button 
+                Style="{StaticResource ToolBarButton}"
+                Content="B" 
+                FontWeight="Bold"
+                Command="ToggleBold" 
+                CommandTarget="{Binding ElementName=richTextBox}"
+                />
+            <Button 
+                Style="{StaticResource ToolBarButton}"
+                Content="I" 
+                FontStyle="Italic"
+                Command="ToggleItalic"
+                CommandTarget="{Binding ElementName=richTextBox}"
+                />
+            <Button 
+                Style="{StaticResource ToolBarButton}"
+                VerticalAlignment="Center" 
+                Command="ToggleUnderline" 
+                CommandTarget="{Binding ElementName=richTextBox}">
+                <Underline>U</Underline>
+            </Button>
+            <Menu>
+                <MenuItem 
+                    ItemsSource="{Binding RecentFiles}"
+                    Padding="0">
+                    <MenuItem.Header>
+                        <local:RecentFilesControl IsHitTestVisible="False"/>
+                    </MenuItem.Header>
+                </MenuItem>
+            </Menu>
+        </ToolBar>
+        <RichTextBox
+            Foreground="{StaticResource MainForegroundBrush}"
+            Background="{StaticResource MainBackgroundBrush}"
+            DataContext="{Binding Source={StaticResource textEditor}}"
+            Grid.Row="2" 
+            SpellCheck.IsEnabled="True" 
+            VerticalScrollBarVisibility="Auto" 
+            ScrollViewer.CanContentScroll="True" 
+            FontSize="14"
+            SelectionChanged="RichTextBox_SelectionChanged"
+            x:Name="richTextBox" 
+            TextChanged="RichTextBox_TextChanged">
+            
+            <RichTextBox.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="{DynamicResource copyCommand}"
+                              Command="Copy" 
+                              CommandTarget="{Binding ElementName=richTextBox}"/>
+                    <MenuItem Header="{DynamicResource pasteCommand}"
+                              Command="Paste" 
+                              CommandTarget="{Binding ElementName=richTextBox}"/>
+                    <MenuItem Header="{DynamicResource cutCommand}"
+                              Command="Cut" 
+                              CommandTarget="{Binding ElementName=richTextBox}"/>
+                    <MenuItem Header="Undo"
+                              Command="Undo" 
+                              CommandTarget="{Binding ElementName=richTextBox}"/>
+                    <MenuItem Header="Redo"
+                              Command="Redo" 
+                              CommandTarget="{Binding ElementName=richTextBox}"/>
+                    <Separator/>
+                    <MenuItem Header="{DynamicResource closeCommand}" Command="Close"/>
+                </ContextMenu>
+            </RichTextBox.ContextMenu>
+            <RichTextBox.Style>
+                <Style TargetType="RichTextBox">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding ElementName=DisableEditor, Path=IsChecked}" Value="True">
+                            <Setter Property="IsEnabled" Value="False"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </RichTextBox.Style>
+        </RichTextBox>
+        <StatusBar 
+            Foreground="{DynamicResource MainForegroundBrush}"
+            Background="{DynamicResource MainBackgroundBrush}"
+            Grid.Row="3" DataContext="{Binding Source={StaticResource textEditor}}">
+            <TextBlock Text="{x:Static localization:Localization.StatusBarCharsNumber}"/>
+            <TextBlock Text="{Binding SymbolsNumber}"/>
+            <TextBlock Text="{x:Static localization:Localization.StatusBarWordsNumber}"/>
+            <TextBlock Text="{Binding WordsNumber}"/>
+            <StackPanel
+                DataContext="{Binding 
+                    RelativeSource={RelativeSource Mode=FindAncestor,
+                        AncestorType={x:Type Window}},
+                    Path=DataContext}"
+                VerticalAlignment="Stretch"
+                Orientation="Horizontal">
+                <TextBlock 
+                    VerticalAlignment="Center"
+                    Text="{x:Static localization:Localization.StatusBarShowTime}"/>
+                <Border 
+                    Padding="5 2"
+                    Margin="5 0 0 0"
+                    Name="DateBorder"
+                    Opacity="0"
+                    Background="{DynamicResource MainForegroundBrush}">
+                    <TextBlock 
+                        VerticalAlignment="Center"
+                        Foreground="{DynamicResource MainBackgroundBrush}"
+                        Text="{Binding CurrentTime}"/>
+                </Border>
+                <StackPanel.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation
+                                        Storyboard.TargetName="DateBorder"
+                                        Storyboard.TargetProperty="Opacity"
+                                        To="1"
+                                        Duration="0:0:0.3"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard>
+                                    <DoubleAnimation 
+                                        Storyboard.TargetName="DateBorder"
+                                        Storyboard.TargetProperty="Opacity"
+                                        To="0"
+                                        Duration="0:0:0.3"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </StackPanel.Triggers>
+            </StackPanel>
+        </StatusBar>
+    </Grid>
+</Window>

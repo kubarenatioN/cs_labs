@@ -1,0 +1,51 @@
+﻿<Window x:Class="lab8.InsertWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:lab8"
+        mc:Ignorable="d"
+        Title="InsertWindow" Height="450" Width="800">
+
+    <StackPanel>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Grid.Column="0" Text="Name"/>
+            <TextBlock Grid.Column="1" Text="Surname"/>
+            <TextBlock Grid.Column="2" Text="Fathername"/>
+            <TextBlock Grid.Column="3" Text="Birthday"/>
+            <TextBlock Grid.Column="4" Text="Gender"/>
+            <TextBlock Grid.Column="5" Text="Photo"/>
+
+            <TextBox Name="name" Grid.Row="1" Grid.Column="0"/>
+            <TextBox Name="surname" Grid.Row="1" Grid.Column="1"/>
+            <TextBox Name="fathername" Grid.Row="1" Grid.Column="2"/>
+            <TextBox Name="birthday" Grid.Row="1" Grid.Column="3"/>
+            <ComboBox Name="gender" Grid.Row="1" Grid.Column="4">
+                <ComboBoxItem Content="м"/>
+                <ComboBoxItem Content="ж"/>
+            </ComboBox>
+            <TextBox Name="photo" Grid.Row="1" Grid.Column="5"/>
+
+        </Grid>
+        <StackPanel Orientation="Horizontal">
+            <Button Content="ОК" 
+                    Width="100"
+                    Click="InsertDataClick"/>
+        </StackPanel>
+        
+    </StackPanel>
+
+</Window>
